@@ -86,18 +86,18 @@ TeamApplicationParticipant.belongsTo(TournamentApplication, { foreignKey: 'appli
 
 async function initializeData() {
   try {
-    const rolesCount = await Role.count();
+    const rolesCount = await Role.findAndCountAll();
     if (rolesCount === 0) {
-      await Role.bulkCreate([
-        { name: 'Admin' },
-        { name: 'User' },
-        { name: 'Player'}
+      await Role.Create([
+        { role_id:1, name: 'Admin' },
+        { role_id:2, name: 'User' },
+        { role_id:3, name: 'Player'}
       ]);
     }
     const userCount = await Role.count();
     if (userCount === 0) {
-      await User.bulkCreate([
-        { login: 'liza', password: 'ased', role: 1}
+      await User.Create([
+        { id:1, login: 'liza', password: 'ased', role: 1}
       ]);
     }
   } catch (error) {
