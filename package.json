@@ -15,6 +15,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "prebuild": "rm -rf node_modules package-lock.json",
     "start": "node 07-01.js",
     "build": "npm install"
   },
