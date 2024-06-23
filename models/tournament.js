@@ -30,7 +30,7 @@ module.exports = (Sequelize, sequelize) => {
       },
       format: {
           type: Sequelize.INTEGER,
-          allowNull: false,
+          
           references: {
               model: TournamentFormat,
               key: 'format_id'
@@ -38,7 +38,7 @@ module.exports = (Sequelize, sequelize) => {
       },
       level: {
           type: Sequelize.INTEGER,
-          allowNull: false,
+         
           references: {
               model: TournamentLevel,
               key: 'level_id'
@@ -46,7 +46,7 @@ module.exports = (Sequelize, sequelize) => {
       },
       type: {
           type: Sequelize.INTEGER,
-          allowNull: false,
+          
           references: {
               model: TournamentType,
               key: 'type_id'
