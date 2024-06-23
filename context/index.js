@@ -88,7 +88,7 @@ async function initializeData() {
   try {
     const rolesCount = await Role.findAndCountAll();
     if (rolesCount === 0) {
-      await Role.Create([
+      await Role.bulkCreate([
         { role_id:1, name: 'Admin' },
         { role_id:2, name: 'User' },
         { role_id:3, name: 'Player'}
@@ -96,8 +96,34 @@ async function initializeData() {
     }
     const userCount = await Role.count();
     if (userCount === 0) {
-      await User.Create([
+      await User.bulkCreate([
         { id:1, login: 'liza', password: 'ased', role: 1}
+      ]);
+    }
+    const formatCount = await TournamentFormat.count();
+    const typeCount = await TournamentType.count();
+    const levelCount = await TournamentLevel.count();
+    if (formatCount === 0) {
+      await TournamentFormat.bulkCreate([
+        { name: 'Формат 1' },
+        { name: 'Формат 2' },
+        // Добавьте другие форматы
+      ]);
+    }
+    
+    if (typeCount === 0) {
+      await TournamentType.bulkCreate([
+        { name: 'Тип 1' },
+        { name: 'Тип 2' },
+        // Добавьте другие типы
+      ]);
+    }
+    
+    if (levelCount === 0) {
+      await TournamentLevel.bulkCreate([
+        { name: 'Уровень 1' },
+        { name: 'Уровень 2' },
+        // Добавьте другие уровни
       ]);
     }
   } catch (error) {
