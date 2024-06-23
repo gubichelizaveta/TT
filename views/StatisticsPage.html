@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
+    <title>Мой сайт</title>
+    <style>
+        #sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 220px;
+            height: 100%;
+            background-color: #f1f1f1;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #sidebar ul {
+            list-style: none;
+            margin-top: 40px;
+            padding: 0;
+            top: 80px;
+        }
+
+        #sidebar li {
+            margin-bottom: 15px;
+        }
+        #sidebar a {
+            display: block;
+            padding: 10px;
+            background-color: #fff;
+            text-decoration: none;
+            color: #000;
+        }
+
+        #sidebar a.active {
+            background-color: #ccc;
+            font-weight: bold;
+        }
+
+        #content {
+            margin-left: 250px; 
+            margin-top: 20px; 
+            padding: 45px;
+        }
+        li a {
+            display: block;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;           
+            cursor: pointer;
+            text-decoration: none; 
+            color: inherit; 
+        }
+    
+        #logout-btn {
+            position: absolute;
+            text-align: center;
+            right: 10px;
+            background-color: #fff;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        .button-menu{
+            font-size: 10px;
+            width: 220px;
+            height: 40px;
+        }
+        table {
+            width: 100%; 
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th:first-child,
+        summary {
+            padding-left: 10px;
+        }
+        td:first-child
+        {
+            padding-left: 10px;
+        }
+        th {
+            background-color: #f2f2f2;
+            padding-left: 10px;
+        }
+        details {
+            margin-top: 10px; 
+        }
+        summary {
+            cursor: pointer;
+            font-weight: bold;
+            text-align: left;
+        }
+        .inner-table {
+            margin-top: 10px; 
+            width: calc(100% - 20px);
+        }
+        nav {
+            width: 220px;
+            text-align: left;
+            margin-bottom: 15px;
+            margin-top: -30px;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav ul a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            border: 1px solid rgba(0, 0, 0, 0.3); 
+            border-radius: 5px;
+        }
+        nav ul a:hover {
+            background-color: #ccc;
+        }
+        nav ul ul {
+            display: none;
+            padding-left: 20px;
+        }
+        nav ul li:hover > ul {
+            display: block;
+        }
+    
+    </style>
+</head>
+<body>
+    <div id="sidebar">
+        <ul>
+            <button onclick="Page1()" class="button-menu">расписание</button>
+            <button onclick="Page2()" class="button-menu">заявки</button>
+            <button onclick="Page3()" class="button-menu">матчи</button>
+            <button onclick="Page6()" class="button-menu">результаты</button>
+            <nav class="one">
+                <ul class="topmenu">
+                  <li><a style="background: rgba(255, 255, 255, .1); text-align: center;font-family: Arial, Helvetica, sans-serif; border-radius: 4px; text-transform: uppercase; text-decoration: none;letter-spacing: .1rem; font-size: 10px; cursor: pointer;color: #000000;">рейтинг<i class="fa"></i></a>
+                    <ul>
+                      <li><a style="background: rgba(255, 255, 255, .1); text-align: center;" href="http://localhost:3000/admin/ratingAll">просмотреть</a></li>
+                      <li><a style="background: rgba(255, 255, 255, .1); text-align: center;" href="http://localhost:3000/admin/ratingAdd">добавить игрока</a></li>
+                    </ul>
+                  </li>
+                </ul>
+            </nav>
+            <button onclick="Page4()" class="button-menu">статистика</button>
+            <button onclick="Page5()" class="button-menu">лента новостей</button>
+        </ul>
+    </div>
+    <button onclick="Exit()" id="logout-btn">Выход</button>
+    <div id="content">
+        <div id="table-controls">
+            <label for="search">Поиск:</label>
+            <input type="text" id="search" oninput="filterTable()" placeholder="Введите фамилию">
+    
+            <label for="rating-filter">Фильтр по проценту побед:</label>
+            <select id="rating-filter" onchange="filterTable()">
+                <option value="">Все</option>
+                <option value="75-">75 и более</option>
+                <option value="40-74">40-74</option>
+                <option value="0-39">0-39</option>
+            </select>
+    
+            <label for="sort-by">Сортировка:</label>
+            <select id="sort-by" onchange="sortTable()">
+                <option>-</option>
+                <option value="LastName">Фамилия</option>
+                <option value="Win">Победы</option>
+                <option value="Loss">Поражения</option>
+            </select>
+            <button onclick="resetFilters()">Сбросить фильтры</button>
+        </div>
+        <table id="application-table">
+            <thead>
+                <tr>
+                    <th>Фамилия</th>
+                    <th>Имя</th>
+                    <th>Отчество</th>
+                    <th>Победы</th>
+                    <th>Поражения</th>
+                    <th>Процент побед</th>
+                    <th>Всего игр</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function Exit() {
+            fetch("http://localhost:5000/Exit")
+            .then(response => response.text())
+            .then(html => {document.documentElement.innerHTML = html; window.location.href = '/';})
+        }
+        function Page1() {
+        fetch("http://localhost:3000/admin/shedule")
+            .then(response => response.text())
+            .then(html => {document.documentElement.innerHTML = html; location.reload();})
+            .then(history.pushState(null, null, '/admin/shedule'))
+            .catch(error => console.error(error));
+        }
+        function Page2() {
+        fetch("http://localhost:3000/admin/application")
+            .then(response => response.text())
+            .then(html => {document.documentElement.innerHTML = html; location.reload();})
+            .then(history.pushState(null, null, '/admin/application'))
+            .catch(error => console.error(error));
+        }
+        function Page3() {
+        fetch("http://localhost:3000/admin/matches")
+            .then(response => response.text())
+            .then(html => document.documentElement.innerHTML = html)
+            .then(history.pushState(null, null, '/admin/matches'))
+            .catch(error => console.error(error));
+        }
+        function Page4() {
+		fetch("http://localhost:3000/admin/statistics")
+			.then(response => response.text())
+			.then(html => {document.documentElement.innerHTML = html; location.reload();})
+			.then(history.pushState(null, null, '/admin/statistics'))
+			.catch(error => console.error(error));
+		}
+        function Page5() {
+		fetch("http://localhost:3000/admin/news")
+			.then(response => response.text())
+			.then(html => {document.documentElement.innerHTML = html; location.reload();})
+			.then(history.pushState(null, null, '/admin/news'))
+			.catch(error => console.error(error));
+		} 
+        function Page6() {
+		fetch("http://localhost:3000/admin/result")
+			.then(response => response.text())
+			.then(html => {document.documentElement.innerHTML = html; location.reload();})
+			.then(history.pushState(null, null, '/admin/result'))
+			.catch(error => console.error(error));
+		}
+        let statisticsData = [];
+        let dataLast = [];
+
+        async function loadRating() {
+            try {
+                const response = await fetch("http://localhost:3000/statistics/all");
+                statisticsData = await response.json();
+                dataLast = statisticsData;
+                renderTable();
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        function renderTable() {
+            const tableBody = document.querySelector('#application-table tbody');
+            tableBody.innerHTML = '';
+
+            statisticsData.forEach((statistics) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${statistics.Player.LastName}</td>
+                    <td>${statistics.Player.Name}</td>
+                    <td>${statistics.Player.MiddleName}</td>
+                    <td>${statistics.wins}</td>
+                    <td>${statistics.losses}</td>
+                    <td>${statistics.win_percentage}</td>
+                    <td>${statistics.matches_played}</td>
+                `;
+                tableBody.appendChild(row);
+        });
+        }
+       
+        function filterTable() {
+            const searchInput = document.getElementById('search').value.toLowerCase();
+            const filteredData = statisticsData.filter((st) => {
+                return st.Player.LastName.toLowerCase().includes(searchInput);
+            });
+
+            const stFilter = document.getElementById('rating-filter').value;
+            let finalFilteredData = filteredData;
+
+            if (stFilter !== '') {
+                finalFilteredData = filteredData.filter((st) => {
+                    const stValue = parseFloat(st.win_percentage);
+                    if (stFilter === '75-') {
+                        return stValue >= 75;
+                    } else {
+                        const minWin = parseInt(stFilter.split('-')[0]);
+                        const maxWin = parseInt(stFilter.split('-')[1]);
+                        return stValue >= minWin && stValue <= maxWin;
+                    }
+                });
+            }
+            dataLast = finalFilteredData;
+            renderFilteredData(finalFilteredData);
+        }
+
+        function sortTable() {
+            const sortBy = document.getElementById('sort-by').value;
+            let sortedData = dataLast;
+
+            if (sortBy === 'LastName') {
+                sortedData = sortedData.sort((a, b) => a.Player.LastName.localeCompare(b.Player.LastName));
+            } else if (sortBy === 'Win') {
+                sortedData = sortedData.sort((a, b) => a.wins - b.wins);
+            } else if (sortBy === 'Loss') {
+                sortedData = sortedData.sort((a, b) => parseFloat(a.losses) - parseFloat(b.losses));
+            }
+
+            renderFilteredData(sortedData);
+        }
+
+        function resetFilters() {
+            document.getElementById('search').value = '';
+            document.getElementById('rating-filter').value = '';
+            document.getElementById('sort-by').value = '-';
+            renderTable();
+        }
+
+        function renderFilteredData(data) {
+            const tableBody = document.querySelector('#application-table tbody');
+            tableBody.innerHTML = '';
+
+            data.forEach((st) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${st.Player.LastName}</td>
+                    <td>${st.Player.Name}</td>
+                    <td>${st.Player.MiddleName}</td>
+                    <td>${st.wins}</td>
+                    <td>${st.losses}</td>
+                    <td>${st.win_percentage}</td>
+                    <td>${st.matches_played}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+        window.onload = loadRating;
+    </script>   
+</body>
+</html>

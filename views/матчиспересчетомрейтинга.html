@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
+    <title>Мой сайт</title>
+    <style>
+        #sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 220px;
+            height: 100%;
+            background-color: #f1f1f1;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #sidebar ul {
+            list-style: none;
+            margin-top: 40px;
+            padding: 0;
+            top: 80px;
+        }
+
+        #sidebar li {
+            margin-bottom: 15px;
+        }
+        #sidebar a {
+            display: block;
+            padding: 10px;
+            background-color: #fff;
+            text-decoration: none;
+            color: #000;
+        }
+
+        #sidebar a.active {
+            background-color: #ccc;
+            font-weight: bold;
+        }
+
+        #content {
+            margin-left: 250px; 
+            margin-top: 20px; 
+            padding: 45px;
+        }
+        li a {
+            display: block;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;           
+            cursor: pointer;
+            text-decoration: none; 
+            color: inherit; 
+        }
+    
+        #logout-btn {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            text-align: center;
+            right: 10px;
+            background-color: #fff;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        .button-menu{
+            font-size: 10px;
+            width: 220px;
+            height: 40px;
+        }
+        table {
+            width: 100%; 
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th:first-child,
+        summary {
+            padding-left: 10px;
+        }
+        td:first-child
+        {
+            padding-left: 10px;
+        }
+        th {
+            background-color: #f2f2f2;
+            padding-left: 10px;
+        }
+        details {
+            margin-top: 10px; 
+        }
+        summary {
+            cursor: pointer;
+            font-weight: bold;
+            text-align: left;
+        }
+        .inner-table {
+            margin-top: 10px; 
+            width: calc(100% - 20px);
+        }
+        nav {
+            width: 220px;
+            text-align: left;
+            margin-bottom: 15px;
+            margin-top: -30px;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav ul a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            border: 1px solid rgba(0, 0, 0, 0.3); 
+            border-radius: 5px;
+        }
+        nav ul a:hover {
+            background-color: #ccc;
+        }
+        nav ul ul {
+            display: none;
+            padding-left: 20px;
+        }
+        nav ul li:hover > ul {
+            display: block;
+        }
+    
+    </style>
+</head>
+<body>
+    <div id="sidebar">
+        <ul>
+            <button onclick="Page1()" class="button-menu">расписание</button>
+            <button onclick="Page2()" class="button-menu">заявки</button>
+            <button onclick="Page3()" class="button-menu">матчи</button>
+            <nav class="one">
+                <ul class="topmenu">
+                  <li><a style="background: rgba(255, 255, 255, .1); text-align: center;font-family: Arial, Helvetica, sans-serif; border-radius: 4px; text-transform: uppercase; text-decoration: none;letter-spacing: .1rem; font-size: 10px; cursor: pointer;color: #000000;">рейтинг<i class="fa"></i></a>
+                    <ul>
+                      <li><a style="background: rgba(255, 255, 255, .1); text-align: center;" href="http://localhost:3000/admin/ratingAll">просмотреть</a></li>
+                      <li><a style="background: rgba(255, 255, 255, .1); text-align: center;" href="http://localhost:3000/admin/ratingAdd">добавить игрока</a></li>
+                    </ul>
+                  </li>
+                </ul>
+            </nav>
+            <button onclick="Page4()" class="button-menu">статистика</button>
+            <button onclick="Page5()" class="button-menu">лента новостей</button>
+        </ul>
+    </div>
+    <div id="content">
+        <select id="myDropdown">
+            <option value="">Выбрать турнир...</option>
+        </select>
+        <div id="tournamentContent"></div>
+    </div>
+    <button onclick="Exit()" id="logout-btn">Выход</button>
+
+    <script>
+        function Exit() {
+            fetch("http://localhost:3000/Exit")
+            .then(response => response.text())
+            .then(html => {document.documentElement.innerHTML = html; window.location.href = '/';})
+        }
+        function Page1() {
+        fetch("http://localhost:3000/admin/shedule")
+            .then(response => response.text())
+            .then(html => {document.documentElement.innerHTML = html; location.reload();})
+            .then(history.pushState(null, null, '/admin/shedule'))
+            .catch(error => console.error(error));
+        }
+        function Page2() {
+        fetch("http://localhost:3000/admin/application")
+            .then(response => response.text())
+            .then(html => {document.documentElement.innerHTML = html; location.reload();})
+            .then(history.pushState(null, null, '/admin/application'))
+            .catch(error => console.error(error));
+        }
+        function Page3() {
+		fetch("http://localhost:3000/admin/matches")
+			.then(response => response.text())
+			.then(html => {document.documentElement.innerHTML = html; location.reload();})
+			.then(history.pushState(null, null, '/admin/matches'))
+			.catch(error => console.error(error));
+		}
+        function Page4() {
+		fetch("http://localhost:3000/admin/statistics")
+			.then(response => response.text())
+			.then(html => {document.documentElement.innerHTML = html; location.reload();})
+			.then(history.pushState(null, null, '/admin/statistics'))
+			.catch(error => console.error(error));
+		}
+        function Page5() {
+		fetch("http://localhost:3000/admin/news")
+			.then(response => response.text())
+			.then(html => {document.documentElement.innerHTML = html; location.reload();})
+			.then(history.pushState(null, null, '/admin/news'))
+			.catch(error => console.error(error));
+		} 
+        async function loadTournaments() {
+        const dropdown = document.getElementById('myDropdown');
+        await fetch("http://localhost:3000/tournament/all")
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(tournament => {
+                    const option = document.createElement('option');
+                    option.value = tournament.tournament_id;
+                    option.textContent = tournament.tournament_name;
+                    dropdown.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Ошибка при загрузке данных:', error));
+        }
+        document.getElementById('myDropdown').addEventListener('change', async function() {
+            const selectedTournamentId = this.value;
+            if (selectedTournamentId) {
+                await fetch(`http://localhost:3000/matches/${selectedTournamentId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            showMatches(data);
+                        } else {
+                            showGenerateMatchesButton(selectedTournamentId);
+                        }
+                    })
+                    .catch(error => console.error('Ошибка при загрузке матчей:', error));
+            }
+        });
+
+        function showMatches(matches) {
+            const tournamentContent = document.getElementById('tournamentContent');
+            tournamentContent.innerHTML = ''; 
+            const table = document.createElement('table');
+            const tbody = document.createElement('tbody');
+            table.innerHTML = `
+                <thead>
+                    <tr>
+                        <th>Match ID</th>
+                        <th>Игрок 1</th>
+                        <th>Игрок 2</th>
+                        <th>Результат</th>
+                    </tr>
+                </thead>
+            `;
+            for (const match of matches) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${match.match_id}</td>
+                    <td>${match.player1_id}</td>
+                    <td>${match.player2_id}</td>
+                    <td>${match.score !== null ? match.score : `<input type="text" id="${match.match_id}" name="resultInput">`}</td>
+                `;
+                if (match.score === null) {
+                    const saveButton = document.createElement('button');
+                    saveButton.textContent = 'Save';
+                    saveButton.addEventListener('click', () => {
+                        const resultInput = tr.querySelector('input[name="resultInput"]');
+                        const newScore = resultInput.value;
+                        const [score1, score2] = newScore.split('-');
+            
+                        const numScore1 = parseInt(score1.trim(), 10);
+                        const numScore2 = parseInt(score2.trim(), 10);
+                        let winnerId;
+                        if (numScore1 > numScore2) {
+                            winnerId = match.player1_id;
+                        } else if (numScore1 < numScore2) {
+                            winnerId = match.player2_id;
+                        }
+                        if (winnerId) {
+                           
+                            saveMatchResult(match, winnerId, newScore);
+                            updatePlayerRatings(match, winnerId, numScore1, numScore2);
+                           
+                        /*     fetch('/matches/result', {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    matchId: match.match_id,
+                                    winnerId: winnerId,
+                                    score: newScore
+                                })
+                            })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                fetch(`http://localhost:3000/matches/${match.tournament_id}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.length > 0) {
+                                            showMatches(data);
+                                        } else {
+                                            showGenerateMatchesButton(selectedTournamentId);
+                                        }
+                                    })
+                                    .catch(error => console.error('Ошибка при загрузке матчей:', error));
+                            })
+                            .catch(error => {
+                                console.error('Error saving match result:', error);
+                            }); */
+                        } 
+                    });
+                    tr.lastElementChild.appendChild(saveButton);
+                }
+                tbody.appendChild(tr);
+            }
+            table.appendChild(tbody);
+            tournamentContent.appendChild(table);
+        }
+
+        async function saveMatchResult(match, winnerId, newScore) {
+            await fetch('/matches/result', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    matchId: match.match_id,
+                    winnerId: winnerId,
+                    score: newScore
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                fetch(`http://localhost:3000/matches/${match.tournament_id}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            showMatches(data);
+                        } else {
+                            showGenerateMatchesButton(selectedTournamentId);
+                        }
+                    })
+                    .catch(error => console.error('Ошибка при загрузке матчей:', error));
+            })
+            .catch(error => {
+                console.error('Error saving match result:', error);
+            });
+        }
+
+        async function updatePlayerRatings(match, winnerId, score1, score2) {
+            const player1Id = match.player1_id;
+            const player2Id = match.player2_id;
+
+            const {player1, player2} = await fetchPlayerRating(player1Id,player2Id);
+            //const player2Rating = await fetchPlayerRating(player2Id);
+
+            const ratingDifference = Math.abs(parseFloat(player1) - parseFloat(player2));
+            let ratingChange;
+            if (player1 === null || player2 === null) {
+                return;
+            }
+            if (ratingDifference <= 50) {
+                ratingChange = 3.00;
+            } else if (ratingDifference <= 100) {
+                ratingChange = parseFloat(player1) < parseFloat(player2) ? 4.00 : 2.00;
+            } else {
+                ratingChange = parseFloat(player1) < parseFloat(player2) ? 5.00 : 1.00;
+            }
+
+            const newPlayer1Rating = parseFloat(player1) + (winnerId === player1Id ? ratingChange : -ratingChange);
+            const newPlayer2Rating = parseFloat(player2) + (winnerId === player2Id ? ratingChange : -ratingChange);
+
+            await updatePlayerRating(player1Id, newPlayer1Rating);
+            await updatePlayerRating(player2Id, newPlayer2Rating);
+        }
+
+        async function fetchPlayerRating(player1Id,player2Id) {
+            return await fetch(`http://localhost:3000/player/rating/${player1Id}/${player2Id}`)
+                .then(response => response.json())
+                .catch(error => {
+                    console.error('Ошибка при получении рейтинга игрока:', error);
+                    return 0;
+                });
+        }
+
+        async function updatePlayerRating(playerId, newRating) {
+            await fetch(`/player/${playerId}/rating`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ rating: newRating })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка при обновлении рейтинга игрока:', error);
+            });
+        }
+        function showGenerateMatchesButton(tournamentId) {
+            const tournamentContent = document.getElementById('tournamentContent');
+            tournamentContent.innerHTML = ''; 
+            const button = document.createElement('button');
+            button.textContent = 'Generate Matches';
+            button.addEventListener('click', async function() {
+                try {
+                const response = await fetch(`/matches/generate/${tournamentId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                    if (response.ok) {
+                        const res = await fetch(`http://localhost:3000/matches/${tournamentId}`)
+                        showMatches(res.json());
+                    } else {
+                        alert('Ошибка генерации!');
+                    }
+                    } catch (error) {
+                        console.error(error);
+                        alert('Произошла ошибка при выполнении операции!');
+                }
+            });
+            tournamentContent.appendChild(button);
+        }
+        window.onload = loadTournaments;
+    </script>   
+</body>
+</html>

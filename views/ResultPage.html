@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
+    <title>Мой сайт</title>
+    <style>
+        #sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 220px;
+            height: 100%;
+            background-color: #f1f1f1;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #sidebar ul {
+            list-style: none;
+            margin-top: 40px;
+            padding: 0;
+            top: 80px;
+        }
+
+        #sidebar li {
+            margin-bottom: 15px;
+        }
+        #sidebar a {
+            display: block;
+            padding: 10px;
+            background-color: #fff;
+            text-decoration: none;
+            color: #000;
+        }
+
+        #sidebar a.active {
+            background-color: #ccc;
+            font-weight: bold;
+        }
+
+        #content {
+            margin-left: 250px; 
+            margin-top: 20px; 
+            padding: 45px;
+        }
+        li a {
+            display: block;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;           
+            cursor: pointer;
+            text-decoration: none; 
+            color: inherit; 
+        }
+    
+        #logout-btn {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            text-align: center;
+            right: 10px;
+            background-color: #fff;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        .button-menu{
+            font-size: 10px;
+            width: 220px;
+            height: 40px;
+        }
+        table {
+            width: 100%; 
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th:first-child,
+        summary {
+            padding-left: 10px;
+        }
+        td:first-child
+        {
+            padding-left: 10px;
+        }
+        th {
+            background-color: #f2f2f2;
+            padding-left: 10px;
+        }
+        details {
+            margin-top: 10px; 
+        }
+        summary {
+            cursor: pointer;
+            font-weight: bold;
+            text-align: left;
+        }
+        .inner-table {
+            margin-top: 10px; 
+            width: calc(100% - 20px);
+        }
+        nav {
+            width: 220px;
+            text-align: left;
+            margin-bottom: 15px;
+            margin-top: -30px;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav ul a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            border: 1px solid rgba(0, 0, 0, 0.3); 
+            border-radius: 5px;
+        }
+        nav ul a:hover {
+            background-color: #ccc;
+        }
+        nav ul ul {
+            display: none;
+            padding-left: 20px;
+        }
+        nav ul li:hover > ul {
+            display: block;
+        }
+        .content-box {
+            border: 2px solid #ccc;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .button-menu.active {
+            background-color: #ccc;
+            font-weight: bold;
+        }
+        #tournament-status, #tournamentTeam-status {
+            width: 200px;
+            height: 34px;
+            margin-left: calc(100% - 192px);
+            margin-top: -52px;
+            border: 1px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="sidebar">
+        <ul>
+            <button onclick="Page1()" class="button-menu">расписание</button>
+            <button onclick="Page2()" class="button-menu">заявки</button>
+            <button onclick="Page3()" class="button-menu">матчи</button>
+            <button onclick="Page6()" class="button-menu">результаты</button>
+            <nav class="one">
+                <ul class="topmenu">
+                  <li><a style="background: rgba(255, 255, 255, .1); text-align: center;font-family: Arial, Helvetica, sans-serif; border-radius: 4px; text-transform: uppercase; text-decoration: none;letter-spacing: .1rem; font-size: 10px; cursor: pointer;color: #000000;">рейтинг<i class="fa"></i></a>
+                    <ul>
+                      <li><a style="background: rgba(255, 255, 255, .1); text-align: center;" href="http://localhost:3000/admin/ratingAll">просмотреть</a></li>
+                      <li><a style="background: rgba(255, 255, 255, .1); text-align: center;" href="http://localhost:3000/admin/ratingAdd">добавить игрока</a></li>
+                    </ul>
+                  </li>
+                </ul>
+            </nav>
+            <button onclick="Page4()" class="button-menu">статистика</button>
+            <button onclick="Page5()" class="button-menu">лента новостей</button>
+        </ul>
+    </div>
+    <div id="content">
+        <button onclick="showContent('content1', this)" class="button-menu">Личный разяд</button>
+        <button onclick="showContent('content2', this)" class="button-menu">Командный разряд</button>
+        <div id="tournamentContent">
+            <div id="content1" class="content-box" style="display: none;">
+                <select id="PersonalDropdown">
+                    <option value="">Выбрать турнир...</option>
+                </select>
+                <div id="tournament-status"></div>
+                <div id="MatchesPersonal"></div>
+                <div id="tournamentPlacesPersonal" class="content-box" style="margin-top: 20px;">
+                    <!-- <div id="PersonalFirst">1 место: </div>
+                    <div id="PersonalSecond">2 место: </div>
+                    <div id="PersonalThird">3 место: </div> -->
+                </div>
+            </div>
+            <div id="content2" class="content-box" style="display: none;">
+                <select id="CommandDropdown">
+                    <option value="">Выбрать турнир...</option>
+                </select>
+                <div id="tournamentTeam-status"></div>
+                <div id="MatchesCommand"></div>
+                <div id="tournamentPlacesCommand" class="content-box" style="margin-top: 20px;">
+                   <!--  <div id="CommandFirst">1 место: </div>
+                    <div id="CommandSecond">2 место: </div>
+                    <div id="CommandThird">3 место: </div> -->
+                </div>
+            </div>
+        </div>
+       
+    </div>
+    <button onclick="Exit()" id="logout-btn">Выход</button>
+
+    <script>
+          function showContent(contentId, button) {
+
+            var contents = document.querySelectorAll('#tournamentContent > div');
+            contents.forEach(function(content) {
+                content.style.display = 'none';
+            });
+            document.getElementById(contentId).style.display = 'block';
+
+            var buttons = document.querySelectorAll('.button-menu');
+            buttons.forEach(function(btn) {
+                btn.classList.remove('active');
+            });
+            button.classList.add('active');
+
+            if (contentId === 'content1') {
+                loadPersonalTournaments();
+                const tournamentContent = document.getElementById('MatchesCommand');
+                tournamentContent.innerHTML = ''; 
+                const tournamentStatusElement = document.getElementById('tournamentTeam-status');
+                tournamentStatusElement.innerHTML = '';
+                tournamentStatusElement.style.backgroundColor = 'transparent';
+            } else if (contentId === 'content2') {
+                const tournamentContent = document.getElementById('MatchesPersonal');
+                tournamentContent.innerHTML = ''; 
+                const tournamentStatusElement = document.getElementById('tournament-status');
+                tournamentStatusElement.innerHTML = '';
+                tournamentStatusElement.style.backgroundColor = 'transparent';
+                loadCommandTournaments();
+            }
+        }
+        function Exit() {
+            fetch("http://localhost:3000/Exit")
+            .then(response => response.text())
+            .then(html => {document.documentElement.innerHTML = html; window.location.href = '/';})
+        }
+        function Page1() {
+        fetch("http://localhost:3000/admin/shedule")
+            .then(response => response.text())
+            .then(html => {document.documentElement.innerHTML = html; location.reload();})
+            .then(history.pushState(null, null, '/admin/shedule'))
+            .catch(error => console.error(error));
+        }
+        function Page2() {
+        fetch("http://localhost:3000/admin/application")
+            .then(response => response.text())
+            .then(html => {document.documentElement.innerHTML = html; location.reload();})
+            .then(history.pushState(null, null, '/admin/application'))
+            .catch(error => console.error(error));
+        }
+        function Page3() {
+		fetch("http://localhost:3000/admin/matches")
+			.then(response => response.text())
+			.then(html => {document.documentElement.innerHTML = html; location.reload();})
+			.then(history.pushState(null, null, '/admin/matches'))
+			.catch(error => console.error(error));
+		}
+        function Page4() {
+		fetch("http://localhost:3000/admin/statistics")
+			.then(response => response.text())
+			.then(html => {document.documentElement.innerHTML = html; location.reload();})
+			.then(history.pushState(null, null, '/admin/statistics'))
+			.catch(error => console.error(error));
+		}
+        function Page5() {
+		fetch("http://localhost:3000/admin/news")
+			.then(response => response.text())
+			.then(html => {document.documentElement.innerHTML = html; location.reload();})
+			.then(history.pushState(null, null, '/admin/news'))
+			.catch(error => console.error(error));
+		} 
+        function Page6() {
+		fetch("http://localhost:3000/admin/result")
+			.then(response => response.text())
+			.then(html => {document.documentElement.innerHTML = html; location.reload();})
+			.then(history.pushState(null, null, '/admin/result'))
+			.catch(error => console.error(error));
+		}
+        async function loadPersonalTournaments() {
+            const dropdown = document.getElementById('PersonalDropdown');
+            dropdown.innerHTML = '<option value="">Выбрать турнир...</option>'; 
+            await fetch("http://localhost:3000/tournament/single")
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(tournament => {
+                        const option = document.createElement('option');
+                        option.value = tournament.tournament_id;
+                        option.textContent = tournament.tournament_name;
+                        dropdown.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Ошибка при загрузке данных:', error));
+        }
+        async function loadCommandTournaments() {
+            const dropdown = document.getElementById('CommandDropdown');
+            dropdown.innerHTML = '<option value="">Выбрать турнир...</option>'; 
+            await fetch("http://localhost:3000/tournament/command")
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(tournament => {
+                        const option = document.createElement('option');
+                        option.value = tournament.tournament_id;
+                        option.textContent = tournament.tournament_name;
+                        dropdown.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Ошибка при загрузке данных:', error));
+        }
+        async function checkAllMatchesPlayed(tournamentId, matches) {
+            try {
+                const response = await fetch(`http://localhost:3000/matches/areAllPlayed/${tournamentId}`);
+                const data = await response.json();
+                if (data && data.allMatchesPlayed) {
+                    matches.sort((a, b) => b.points - a.points);
+                    const topThree = matches.slice(0, 3);
+                    const tournamentPlacesElement = document.getElementById('tournamentPlacesPersonal');
+                    tournamentPlacesElement.innerHTML = `
+                       <div style="border: 2px solid; padding: 10px;">
+                            <div style="background-color: gold; padding: 5px; margin-bottom: 5px;">1 место: ${topThree[0].LastName} ${topThree[0].Name} ${topThree[0].MiddleName}</div>
+                            <div style="background-color: silver; padding: 5px; margin-bottom: 5px;">2 место: ${topThree[1].LastName} ${topThree[1].Name} ${topThree[1].MiddleName}</div>
+                            <div style="background-color: #cd7f32; padding: 5px; margin-bottom: 5px;">3 место: ${topThree[2].LastName} ${topThree[2].Name} ${topThree[2].MiddleName}</div>
+                        </div>
+                    `;
+                } else {
+                    console.log('Не все матчи сыграны');
+                }
+            } catch (error) {
+                console.error('Ошибка при проверке статуса матчей:', error);
+            }
+        }
+        async function checkAllTeamMatchesPlayed(tournamentId, matches) {
+            try {
+                const response = await fetch(`http://localhost:3000/matches/areAllTeamPlayed/${tournamentId}`);
+                const data = await response.json();
+                if (data && data.allTeamMatchesPlayed) {
+                    matches.sort((a, b) => b.points - a.points);
+                    const topThree = matches.slice(0, 3);
+                    const tournamentPlacesElement = document.getElementById('tournamentPlacesCommand');
+                    tournamentPlacesElement.innerHTML = `
+                        <div>1 место: ${topThree[0].team_name} </div>
+                        <div>2 место: ${topThree[1].team_name} </div>
+                        <div>3 место: ${topThree[2].team_name} </div>
+                    `;
+                } else {
+                    console.log('Не все матчи сыграны');
+                }
+            } catch (error) {
+                console.error('Ошибка при проверке статуса матчей:', error);
+            }
+        }
+        document.getElementById('PersonalDropdown').addEventListener('change', async function() {
+            const selectedTournamentId = this.value;
+            const tournamentStatusElement = document.getElementById('tournament-status');
+            tournamentStatusElement.innerHTML = '';
+            const tournamentPlacesElement = document.getElementById('tournamentPlacesPersonal');
+            tournamentPlacesElement.innerHTML = ``;
+            await fetch(`http://localhost:3000/tournament/date/${selectedTournamentId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                            const startDateString = data[0].start_date.slice(0, 10);
+                            const endDateString = data[0].end_date.slice(0, 10);
+                            const today = new Date();
+                            const year = today.getFullYear();
+                            const month = String(today.getMonth() + 1).padStart(2, '0'); 
+                            const day = String(today.getDate()).padStart(2, '0'); 
+
+                            const formattedDateString = `${year}-${month}-${day}`;
+                            const startDate = new Date(startDateString);
+                            const endDate = new Date(endDateString);
+                            const formattedDate = new Date(formattedDateString);
+                            
+                            let statusText = '';
+                            let background = '';
+                            if (formattedDate >= startDate && formattedDate <= endDate) {
+                                statusText = 'В процессе';
+                                background = '#FFA500';
+                            } else if (formattedDate > endDate) {
+                                statusText = 'Завершен';
+                                background = 'gray';
+                            } else if (formattedDate < startDate) {
+                                statusText = 'Запланирован';
+                                background = 'lightblue';
+                            }
+                            
+                            tournamentStatusElement.textContent = statusText;
+                            tournamentStatusElement.style.backgroundColor = background;
+                        
+                    })
+                    .catch(error => console.error('Ошибка при загрузке матчей:', error));
+            if (selectedTournamentId) {
+                await fetch(`http://localhost:3000/matches/tResult/${selectedTournamentId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            showMatches(data);
+                            checkAllMatchesPlayed(selectedTournamentId,data);
+                        } else {
+                            const tournamentContent = document.getElementById('MatchesPersonal');
+                            tournamentContent.innerHTML = 'На данный турнир еще не созданы матчи'; 
+                        } 
+                    })
+                    .catch(error => console.error('Ошибка при загрузке матчей:', error));
+            }
+        });
+        document.getElementById('CommandDropdown').addEventListener('change', async function() {
+            const selectedTournamentId = this.value;
+            const tournamentStatusElement = document.getElementById('tournamentTeam-status');
+            tournamentStatusElement.innerHTML = '';
+            const tournamentPlacesElement = document.getElementById('tournamentPlacesCommand');
+            tournamentPlacesElement.innerHTML = ``;
+            await fetch(`http://localhost:3000/tournament/date/${selectedTournamentId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                            const startDateString = data[0].start_date.slice(0, 10);
+                            const endDateString = data[0].end_date.slice(0, 10);
+                            const today = new Date();
+                            const year = today.getFullYear();
+                            const month = String(today.getMonth() + 1).padStart(2, '0'); 
+                            const day = String(today.getDate()).padStart(2, '0'); 
+
+                            const formattedDateString = `${year}-${month}-${day}`;
+                            const startDate = new Date(startDateString);
+                            const endDate = new Date(endDateString);
+                            const formattedDate = new Date(formattedDateString);
+                            
+                            let statusText = '';
+                            let background = '';
+                            if (formattedDate >= startDate && formattedDate <= endDate) {
+                                statusText = 'В процессе';
+                                background = '#FFA500';
+                            } else if (formattedDate > endDate) {
+                                statusText = 'Завершен';
+                                background = 'gray';
+                            } else if (formattedDate < startDate) {
+                                statusText = 'Запланирован';
+                                background = 'lightblue';
+                            }
+                           
+                            tournamentStatusElement.textContent = statusText;
+                            tournamentStatusElement.style.backgroundColor = background;
+                        
+                    })
+                    .catch(error => console.error('Ошибка при загрузке матчей:', error));
+            if (selectedTournamentId) {
+                await fetch(`http://localhost:3000/matches/teamTResult/${selectedTournamentId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            showTeamMatches(data);
+                        } else {
+                            const tournamentContent = document.getElementById('MatchesCommand');
+                            tournamentContent.innerHTML = 'На данный турнир еще не созданы матчи'; 
+                        } 
+                    })
+                    .catch(error => console.error('Ошибка при загрузке матчей:', error));
+            }
+        });
+        function showMatches(matches) {
+            const tournamentContent = document.getElementById('MatchesPersonal');
+            tournamentContent.innerHTML = ''; 
+            const table = document.createElement('table');
+            const tbody = document.createElement('tbody');
+            table.innerHTML = `
+                <thead>
+                    <tr>
+                        <th>Фамилия</th>
+                        <th>Имя</th>
+                        <th>Отчество</th>
+                        <th>Очки</th>
+                    </tr>
+                </thead>
+            `;
+            for (const match of matches) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${match.LastName}</td>
+                    <td>${match.Name}</td>
+                    <td>${match.MiddleName}</td>
+                    <td>${match.points}</td>
+                `;
+                tbody.appendChild(tr);
+            }
+            table.appendChild(tbody);
+            tournamentContent.appendChild(table);
+        }
+        function showTeamMatches(matches) {
+            const tournamentContent = document.getElementById('MatchesCommand');
+            tournamentContent.innerHTML = ''; 
+            const table = document.createElement('table');
+            const tbody = document.createElement('tbody');
+            table.innerHTML = `
+                <thead>
+                    <tr> 
+                        <th>Название команды</th>
+                        <th>Очки</th>
+                    </tr>
+                </thead>
+            `;
+            for (const match of matches) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${match.team_name}</td>
+                    <td>${match.points}</td>
+                  
+                `;
+                if (match.score === null) {
+                    const saveButton = document.createElement('button');
+                    saveButton.textContent = 'Save';
+                    saveButton.addEventListener('click', () => {
+                        const resultInput = tr.querySelector('input[name="resultInput"]');
+                        const newScore = resultInput.value;
+                        const [score1, score2] = newScore.split('-');
+            
+                        const numScore1 = parseInt(score1.trim(), 10);
+                        const numScore2 = parseInt(score2.trim(), 10);
+                        let winnerId;
+                        if (numScore1 > numScore2) {
+                            winnerId = match.team1_id;
+                        } else if (numScore1 < numScore2) {
+                            winnerId = match.team2_id;
+                        }
+                        if (winnerId) {
+                           
+                            saveTeamMatchResult(match, winnerId, newScore);
+
+                        } 
+                    });
+                    tr.lastElementChild.appendChild(saveButton);
+                }
+                tbody.appendChild(tr);
+            }
+            table.appendChild(tbody);
+            tournamentContent.appendChild(table);
+        }
+        async function saveMatchResult(match, winnerId, newScore) {
+            await fetch('/matches/result', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    matchId: match.match_id,
+                    winnerId: winnerId,
+                    score: newScore
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                fetch(`http://localhost:3000/matches/${match.tournament_id}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            showMatches(data);
+                        } else {
+                            showGenerateMatchesButton(selectedTournamentId);
+                        }
+                    })
+                    .catch(error => console.error('Ошибка при загрузке матчей:', error));
+            })
+            .catch(error => {
+                console.error('Error saving match result:', error);
+            });
+        }
+        async function saveTeamMatchResult(match, winnerId, newScore) {
+            await fetch('/matches/team/result', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    matchId: match.match_id,
+                    winnerId: winnerId,
+                    score: newScore
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                fetch(`http://localhost:3000/matches/${match.tournament_id}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            showTeamMatches(data);
+                        } else {
+                            showTeamGenerateMatchesButton(selectedTournamentId);
+                        }
+                    })
+                    .catch(error => console.error('Ошибка при загрузке матчей:', error));
+            })
+            .catch(error => {
+                console.error('Error saving match result:', error);
+            });
+        }
+        async function updatePlayerRatings(match, winnerId, score1, score2) {
+            const player1Id = match.player1_id;
+            const player2Id = match.player2_id;
+
+            const {player1, player2} = await fetchPlayerRating(player1Id,player2Id);
+            //const player2Rating = await fetchPlayerRating(player2Id);
+
+            const ratingDifference = Math.abs(parseFloat(player1) - parseFloat(player2));
+            let ratingChange;
+            if (player1 === null || player2 === null) {
+                return;
+            }
+            if (ratingDifference <= 50) {
+                ratingChange = 3.00;
+            } else if (ratingDifference <= 100) {
+                ratingChange = parseFloat(player1) < parseFloat(player2) ? 4.00 : 2.00;
+            } else {
+                ratingChange = parseFloat(player1) < parseFloat(player2) ? 5.00 : 1.00;
+            }
+
+            const newPlayer1Rating = parseFloat(player1) + (winnerId === player1Id ? ratingChange : -ratingChange);
+            const newPlayer2Rating = parseFloat(player2) + (winnerId === player2Id ? ratingChange : -ratingChange);
+
+            await updatePlayerRating(player1Id, newPlayer1Rating);
+            await updatePlayerRating(player2Id, newPlayer2Rating);
+        }
+
+        async function fetchPlayerRating(player1Id,player2Id) {
+            return await fetch(`http://localhost:3000/player/rating/${player1Id}/${player2Id}`)
+                .then(response => response.json())
+                .catch(error => {
+                    console.error('Ошибка при получении рейтинга игрока:', error);
+                    return 0;
+                });
+        }
+
+        async function updatePlayerRating(playerId, newRating) {
+            await fetch(`/player/${playerId}/rating`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ rating: newRating })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка при обновлении рейтинга игрока:', error);
+            });
+        }
+        function showGenerateMatchesButton(tournamentId) {
+            const tournamentContent = document.getElementById('MatchesPersonal');
+            tournamentContent.innerHTML = ''; 
+            const button = document.createElement('button');
+            button.style.marginTop = '10px';
+            button.textContent = 'Генерация матчей';
+            button.addEventListener('click', async function() {
+                try {
+                const response = await fetch(`/matches/generate/${tournamentId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                    if (response.ok) {
+                        const res = await fetch(`http://localhost:3000/matches/${tournamentId}`)
+                        showMatches(res.json());
+                    } else {
+                        alert('Ошибка генерации!');
+                    }
+                    } catch (error) {
+                        console.error(error);
+                        alert('Произошла ошибка при выполнении операции!');
+                }
+            });
+            tournamentContent.appendChild(button);
+        }
+        function showTeamGenerateMatchesButton(tournamentId) {
+            const tournamentContent = document.getElementById('MatchesCommand');
+            tournamentContent.innerHTML = ''; 
+            const button = document.createElement('button');
+            button.style.marginTop = '10px';
+            button.textContent = 'Генерация матчей';
+            button.addEventListener('click', async function() {
+                try {
+                const response = await fetch(`/matches/generate/team/${tournamentId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                    const data = await response.json(); 
+                    if (data.length > 0) { 
+                        const res = await fetch(`http://localhost:3000/matches/${tournamentId}`)
+                        const data2 = await res.json();
+                        showTeamMatches(data2);
+                    } else {
+                        alert('Ошибка генерации!');
+                    }
+                } catch (error) {
+                        console.error(error);
+                        alert('Произошла ошибка при выполнении операции!');
+                }
+            });
+            tournamentContent.appendChild(button);
+        }
+    </script>   
+</body>
+</html>

@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
+    <title>Мой сайт</title>
+    <style>
+                #sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 220px;
+            height: 100%;
+            background-color: #f1f1f1;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #sidebar ul {
+            list-style: none;
+            margin-top: 40px;
+            padding: 0;
+            top: 80px;
+        }
+
+        #sidebar li {
+            margin-bottom: 15px;
+        }
+        #sidebar a {
+            display: block;
+            padding: 10px;
+            background-color: #fff;
+            text-decoration: none;
+            color: #000;
+        }
+
+        #sidebar a.active {
+            background-color: #ccc;
+            font-weight: bold;
+        }
+
+        #content {
+            margin-left: 250px; 
+            margin-top: 20px; 
+            padding: 45px;
+        }
+        li a {
+            display: block;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;           
+            cursor: pointer;
+            text-decoration: none; 
+            color: inherit; 
+        }
+    
+        #logout-btn {
+            position: absolute;
+            text-align: center;
+            right: 10px;
+            background-color: #fff;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        .button-menu{
+            font-size: 10px;
+            width: 220px;
+            height: 40px;
+        }
+        table {
+            width: 100%; 
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th:first-child,
+        summary {
+            padding-left: 10px;
+        }
+        td:first-child
+        {
+            padding-left: 10px;
+        }
+        th {
+            background-color: #f2f2f2;
+            padding-left: 10px;
+        }
+        details {
+            margin-top: 10px; 
+        }
+        summary {
+            cursor: pointer;
+            font-weight: bold;
+            text-align: left;
+        }
+        .inner-table {
+            margin-top: 10px; 
+            width: calc(100% - 20px);
+        }
+        nav {
+            width: 220px;
+            text-align: left;
+            margin-bottom: 15px;
+            margin-top: -30px;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav ul a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            border: 1px solid rgba(0, 0, 0, 0.3); 
+            border-radius: 5px;
+        }
+        nav ul a:hover {
+            background-color: #ccc;
+        }
+        nav ul ul {
+            display: none;
+            padding-left: 20px;
+        }
+        nav ul li:hover > ul {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="sidebar">
+        <ul>
+            <button onclick="Page1()" class="button-menu">расписание</button>
+            <button onclick="Page2()" class="button-menu">заявки</button>
+            <button onclick="Page3()" class="button-menu">матчи</button>  
+            <button onclick="Page6()" class="button-menu">результаты</button>   
+            <nav class="one">
+                <ul class="topmenu">
+                  <li><a style="background: rgba(255, 255, 255, .1); text-align: center;font-family: Arial, Helvetica, sans-serif; border-radius: 4px; text-transform: uppercase; text-decoration: none;letter-spacing: .1rem; font-size: 10px; cursor: pointer;color: #000000;">рейтинг<i class="fa"></i></a>
+                    <ul>
+                      <li><a style="background: rgba(255, 255, 255, .1); text-align: center;" href="http://localhost:3000/admin/ratingAll">просмотреть</a></li>
+                      <li><a style="background: rgba(255, 255, 255, .1); text-align: center;" href="http://localhost:3000/admin/ratingAdd">добавить игрока</a></li>
+                    </ul>
+                  </li>
+                </ul>
+            </nav>
+            <button onclick="Page4()" class="button-menu">статистика</button>
+            <button onclick="Page5()" class="button-menu">лента новостей</button>
+        </ul>
+    </div>
+    <button onclick="Exit()" id="logout-btn">Выход</button>
+    <div id="content">
+        <table id="application-table">
+            <thead>
+                <tr>
+                    <th>Заявка</th>
+                    <th>Название турнира</th>
+                    <th>Дата подачи заявки</th>
+                    <th>Отмена</th>
+                    <th>Подтвердждение</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <table id="application-team-table">
+            <thead>
+                <tr>
+                    <th>Заявка</th>
+                    <th>Название турнира</th>
+                    <th>Дата подачи заявки</th>
+                    <th>Отмена</th>
+                    <th>Подтвердждение</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function Exit() {
+            fetch("http://localhost:5000/Exit")
+            .then(response => response.text())
+            .then(html => {document.documentElement.innerHTML = html; window.location.href = '/';})
+        }
+        function Page1() {
+        fetch("http://localhost:3000/admin/shedule")
+            .then(response => response.text())
+            .then(html => {document.documentElement.innerHTML = html; location.reload();})
+            .then(history.pushState(null, null, '/admin/shedule'))
+            .catch(error => console.error(error));
+        }
+        function Page2() {
+        fetch("http://localhost:3000/admin/application")
+            .then(response => response.text())
+            .then(html => {document.documentElement.innerHTML = html; location.reload();})
+            .then(history.pushState(null, null, '/admin/application'))
+            .catch(error => console.error(error));
+        }
+        function Page3() {
+		fetch("http://localhost:3000/admin/matches")
+			.then(response => response.text())
+			.then(html => {document.documentElement.innerHTML = html; location.reload();})
+			.then(history.pushState(null, null, '/admin/matches'))
+			.catch(error => console.error(error));w
+		}
+        function Page4() {
+        fetch("http://localhost:3000/admin/statistics")
+            .then(response => response.text())
+            .then(html => {document.documentElement.innerHTML = html; location.reload();})
+            .then(history.pushState(null, null, '/admin/statistics'))
+            .catch(error => console.error(error));
+        }
+        function Page5() {
+		fetch("http://localhost:3000/admin/news")
+			.then(response => response.text())
+			.then(html => {document.documentElement.innerHTML = html; location.reload();})
+			.then(history.pushState(null, null, '/admin/news'))
+			.catch(error => console.error(error));
+		} 
+        function Page6() {
+		fetch("http://localhost:3000/admin/result")
+			.then(response => response.text())
+			.then(html => {document.documentElement.innerHTML = html; location.reload();})
+			.then(history.pushState(null, null, '/admin/result'))
+			.catch(error => console.error(error));
+		}
+        async function checkPlayerStatus(lastName, firstName, middleName, birthYear) {
+            try {
+                const response = await fetch(`/application/checkPlayer?lastName=${lastName}&firstName=${firstName}&middleName=${middleName}&birthYear=${birthYear}`);
+                const data = await response.json();
+            return data.isPlayer; 
+            } catch (error) {
+                console.error(error);
+            return false; 
+            }
+        }
+        async function checkTeamStatus(TeamName) {
+            try {
+                const response = await fetch(`/application/checkTeam?TeamName=${TeamName}`);
+                const data = await response.json();
+            return data.isTeam; 
+            } catch (error) {
+                console.error(error);
+            return false; 
+            }
+        }
+        //позже добавить условие чтоб весь столбец был без кнопок сделать игроком... проверять есть ли команда перед тем как добавить
+        async function makeTeam(Name, applicationId) {
+            try {
+                const response = await fetch('/application/createTeam', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ TeamName: Name })
+                });
+
+                const data = await response.json();
+                const id = parseInt(applicationId,10);
+                const response2 = await fetch(`/application/getTeamsPlayer?applicationId=${id}`);
+                const TeamsParticipants = await response2.json();
+                if (data != null) {
+                for(const participant of TeamsParticipants)
+                {
+                    const requestData = {
+                        team: parseInt(data.teamId,10),
+                        player: parseInt(participant,10)
+                    };       
+                    const addPlayerResponse = await fetch('/application/addPlayerInTeam', {
+                        method: 'POST',
+                        headers: {
+                                'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(requestData)
+                    });
+                }   
+                location.reload();
+                } else {
+                    alert("Ошибка создания команды!");
+                }
+            } catch (error) {
+                    console.error(error);
+                    alert("Произошла ошибка при выполнении операции!");
+            }
+        }
+        async function makePlayer(lastName, firstName, middleName, sportRang, birthYear, login) {
+            try {
+                const response = await fetch(`/application/checkLogin?login=${login}`);
+                const data = await response.json();
+                if (data.userID !== null) {    
+                const requestData = {
+                    userId: data.userID,
+                    lastName: lastName,
+                    firstName: firstName,
+                    middleName: middleName,
+                    birthYear: parseInt(birthYear, 10),
+                    sportRang: parseInt(sportRang,10)
+                };       
+                const createPlayerResponse = await fetch('/application/createPlayer', {
+                    method: 'POST',
+                    headers: {
+                            'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                });
+                if (createPlayerResponse.ok) {
+                    alert("Аккаунт игрока создан!");
+                    location.reload();
+                } else {
+                    alert("Ошибка при создании аккаунта!");
+                }
+                } else {
+                    alert("Логин не найден в базе данных!");
+                }
+            } catch (error) {
+                    console.error(error);
+                    alert("Произошла ошибка при выполнении операции!");
+            }
+        }
+
+        async function cancelApplication(applicationId) {
+            const reason = prompt('Введите причину отказа:');
+            if (!reason) {
+                alert('Причина отказа не может быть пустой!');
+                return;
+            }
+            try {
+                const response = await fetch(`/application/cancel/${applicationId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ reason })
+                });
+            if (response.ok) {
+            alert('Заявка успешно отклонена!');
+            location.reload();
+            } else {
+            alert('Ошибка при отклонении заявки!');
+            }
+            } catch (error) {
+            console.error(error);
+            alert('Произошла ошибка при выполнении операции!');
+        }
+        }
+        async function confirmApplication(applicationId,tournamentId) {
+    /*         try {
+                const response = await fetch(`/application/confirm/${applicationId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+            }
+                });
+            if (response.ok) {
+            alert('Заявка подтверждена!');
+            location.reload();
+            } else {
+            alert('Ошибка подтверждения!');
+            }
+            } catch (error) {
+            console.error(error);
+            alert('Произошла ошибка при выполнении операции!');
+            } */
+            fetch(`/application/confirm`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    applicationId: applicationId,
+                    tournamentId: tournamentId
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Заявка подтверждена!');
+                    location.reload();
+                } else {
+                    alert('Ошибка подтверждения!');
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                alert('Произошла ошибка при выполнении операции!');
+            });
+        }
+
+        async function loadApplications() {
+            try {
+                const response = await fetch("http://localhost:3000/application/all");
+                const applications = await response.json();
+                const tableBody = document.querySelector('#application-table tbody');
+                applications.forEach(async (application) => {
+                const row1 = document.createElement('tr');
+                row1.setAttribute('data-application-id', application.application_id); //aaaaaaa
+                row1.innerHTML = `
+                <td>${application.application_id}</td>
+                <td>${application.Tournament.tournament_name}</td>
+                <td>${application.application_date}</td>
+                <td style="width: 180px; text-align: center;"><button style="background:red;color: black;" onclick="cancelApplication(${application.application_id})">Отменить</button></td>
+                <td style="width: 180px; text-align: center;"><button style="background:green;color: black;" onclick="confirmApplication(${application.application_id},${application.Tournament.tournament_id})">Подтвердить</button></td>
+                `;
+                tableBody.appendChild(row1); 
+
+                const row2 = document.createElement('tr');
+                const cell2 = document.createElement('td');
+                cell2.colSpan = 5; 
+                const details = document.createElement('details'); 
+                const summary = document.createElement('summary'); 
+                const innerTable = document.createElement('table');
+                innerTable.classList.add('inner-table');
+                innerTable.setAttribute('data-application-id', application.application_id); // aaaaaaa
+                innerTable.innerHTML = `
+                    <thead>
+                        <tr>
+                            <th>ID участника</th>
+                            <th>Фамилия</th>
+                            <th>Имя</th>
+                            <th>Отчество</th>
+                            <th>Год рождения</th>
+                            <th>Звание</th>
+                            <th>Регион</th>
+                            <th>Город</th>
+                            <th>Имя тренера</th>
+                            <th>Игрок/Не игрок</th>
+                        </tr>
+                    </thead>
+                <tbody>
+                </tbody>
+                `;
+                const innerTableBody = innerTable.querySelector('tbody');
+                for (const participant of application.ApplicationParticipants) {
+                    const isPlayer = await checkPlayerStatus(participant.last_name, participant.first_name, participant.middle_name, participant.birth_year);
+                    const participantRow = document.createElement('tr');
+                    participantRow.innerHTML = `
+                        <td>${participant.participant_order}</td>
+                        <td>${participant.last_name}</td>
+                        <td>${participant.first_name}</td>
+                        <td>${participant.middle_name}</td>
+                        <td>${participant.birth_year}</td>
+                        <td>${participant.rank}</td>
+                        <td>${participant.region}</td>
+                        <td>${participant.city}</td>
+                        <td>${participant.coach_name}</td>
+                        <td>${isPlayer ? 'игрок' : `<button onclick="makePlayer('${participant.last_name}', '${participant.first_name}', '${participant.middle_name}', '${participant.rank}', '${participant.birth_year}', '${participant.login}')">Сделать игроком</button>`}
+                        </td>
+                    `;
+                    innerTableBody.appendChild(participantRow);
+                }
+                
+                details.appendChild(innerTable); 
+                summary.appendChild(details); 
+                cell2.appendChild(summary); 
+                row2.appendChild(cell2); 
+                tableBody.appendChild(row1);//aaaaaaa
+                tableBody.appendChild(row2);
+            });
+            } catch (error) {
+                console.error(error);
+            }
+            try {
+                const responseTeam = await fetch("http://localhost:3000/application/all/team");
+                const applicationsTeam = await responseTeam.json();
+                const tableBody = document.querySelector('#application-team-table tbody');
+                let TeamName = "";
+                applicationsTeam.forEach(async (applicationTeam) => {
+                    const row1 = document.createElement('tr');
+                    row1.innerHTML = `
+                        <td>${applicationTeam.application_id}</td>
+                        <td>${applicationTeam.Tournament.tournament_name}</td>
+                        <td>${applicationTeam.application_date}</td>
+                        <td style="width: 180px; text-align: center;"><button style="background:red;color: black;" onclick="cancelApplication(${applicationTeam.application_id})">Отменить</button></td>
+                        <td style="width: 180px; text-align: center;"><button style="background:green;color: black;" onclick="confirmApplication(${applicationTeam.application_id},${applicationTeam.Tournament.tournament_id})">Подтвердить</button></td>
+                    `;
+                    tableBody.appendChild(row1); 
+
+                const row2 = document.createElement('tr');
+                const cell2 = document.createElement('td');
+                cell2.colSpan = 5; 
+                const details = document.createElement('details'); 
+                const summary = document.createElement('summary'); 
+                
+                const innerTable = document.createElement('table');
+                
+                innerTable.classList.add('inner-table');
+                
+                innerTable.innerHTML = `
+                    <thead>
+                        <tr>
+                            <th>ID участника</th>
+                            <th>Фамилия</th>
+                            <th>Имя</th>
+                            <th>Отчество</th>
+                            <th>Год рождения</th>
+                            <th>Звание</th>
+                            <th>Регион</th>
+                            <th>Город</th>
+                            <th>Имя тренера</th>
+                            <th>Игрок/Не игрок</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                `;
+                const innerTableBody = innerTable.querySelector('tbody');
+                
+                for (const participant of applicationTeam.TeamApplicationParticipants) {
+                    const isPlayer = await checkPlayerStatus(participant.last_name, participant.first_name, participant.middle_name, participant.birth_year);
+                    const participantRow = document.createElement('tr');
+                    participantRow.innerHTML = `
+                        <td>${participant.participant_order}</td>
+                        <td>${participant.last_name}</td>
+                        <td>${participant.first_name}</td>
+                        <td>${participant.middle_name}</td>
+                        <td>${participant.birth_year}</td>
+                        <td>${participant.rank}</td>
+                        <td>${participant.region}</td>
+                        <td>${participant.city}</td>
+                        <td>${participant.coach_name}</td>
+                        <td>${isPlayer ? 'игрок' : `<button onclick="makePlayer('${participant.last_name}', '${participant.first_name}', '${participant.middle_name}', '${participant.rank}', '${participant.birth_year}', '${participant.login}')">Сделать игроком</button>`}
+                        </td>
+                    `;
+                    TeamName = participant.team_name;
+                    innerTableBody.appendChild(participantRow);
+                }
+                let isTeam = await checkTeamStatus(TeamName);
+                details.appendChild(innerTable); 
+                const teamRow = document.createElement('tr');
+                
+                teamRow.innerHTML = `
+                    Команда: <span id="team-name-${applicationTeam.TeamApplicationParticipants}">${TeamName}</span><br>
+                    <div>${isTeam ? 'уже команда' : `<button onclick="makeTeam('${TeamName}', '${applicationTeam.application_id}')">Добавить команду</button>`}</div>
+                `;
+                details.appendChild(teamRow);
+                summary.appendChild(details);
+                 
+                cell2.appendChild(summary); 
+                row2.appendChild(cell2); 
+                tableBody.appendChild(row2);
+                });
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        window.onload = loadApplications;
+    </script>   
+</body>
+</html>
