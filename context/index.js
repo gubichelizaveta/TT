@@ -1,5 +1,6 @@
 const Sequelize = require("sequelize");
 const config = require("../config.json");
+const { noTrueLogging } = require("sequelize/lib/utils/deprecations");
 
 const sequelize = new Sequelize(
   config.db.name,
@@ -83,6 +84,30 @@ ApplicationParticipant.belongsTo(TournamentApplication, { foreignKey: 'applicati
 
 TeamApplicationParticipant.belongsTo(TournamentApplication, { foreignKey: 'application' });
 
+async function initializeData() {
+  try {
+    const rolesCount = await Role.count();
+    if (rolesCount === 0) {
+      await Role.bulkCreate([
+        { name: 'Admin' },
+        { name: 'User' },
+        { name: 'Player'}
+      ]);
+    }
+    const userCount = await Role.count();
+    if (userCount === 0) {
+      await User.bulkCreate([
+        { login: 'liza', password: 'ased', role: 1}
+      ]);
+    }
+  } catch (error) {
+    console.error("Error adding initial data:", error);
+  }
+}  
+
+sequelize.addHook('afterSync', async () => {
+  await initializeData();
+});
 sequelize
   .sync({ alter: true })
   .then(() => console.log("Database synced successfully"))

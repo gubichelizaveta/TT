@@ -1,10 +1,10 @@
 {
     "db":{
-        "name": "TTT",
-        "user": "postgres",
-        "password": "123",
+        "name": "tt_6ypw",
+        "user": "tt_6ypw_user",
+        "password": "ofutN1RRChvCGnUFeqLAqJsRsY62dwz1",
         "options": {
-            "host": "localhost",
+            "host": "dpg-cprt9bl6l47c73ds5ek0-a",
             "port": "5432",
             "dialect": "postgres",
             "logging": false,
