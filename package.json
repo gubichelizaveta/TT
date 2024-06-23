@@ -8,5 +8,17 @@
     "pg": "^8.10.0",
     "sequelize": "^6.31.0",
     "tedious": "^16.0.0"
-  }
+  },
+  "name": "lw7",
+  "version": "1.0.0",
+  "main": "07-01.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node 07-01.js",
+    "build": "npm install"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }
