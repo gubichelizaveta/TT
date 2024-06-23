@@ -2,10 +2,10 @@ const statistics = require("../models/statistics");
 
 const adminController = {
     dashboard: (req, res) => {
-        res.sendFile('./views/adminPanel.html');
+        res.sendFile(__dirname + '/views/adminPanel.html');
     },
     shedule: (req, res) => {
-        res.sendFile('./views/ShedulePage.html');
+        res.sendFile(__dirname + '/views/ShedulePage.html');
     },
     application: (req, res) => {
         res.sendFile('C:\\Users\\Liza\\Desktop\\lw7\\views\\ApplicationPage.html');
