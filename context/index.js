@@ -42,9 +42,9 @@ Player.belongsTo(SportsRang, { foreignKey: 'SportRang' });
 //Player.hasOne(Rating, { foreignKey: 'player_id'});
 
 //Определение ассоциаций для модели Tournaments
-Tournament.belongsTo(TournamentFormat, { foreignKey: 'format' });
-Tournament.belongsTo(TournamentLevel, { foreignKey: 'level' });
-Tournament.belongsTo(TournamentType, { foreignKey: 'type' });
+//Tournament.belongsTo(TournamentFormat, { foreignKey: 'format' });
+//Tournament.belongsTo(TournamentLevel, { foreignKey: 'level' });
+//Tournament.belongsTo(TournamentType, { foreignKey: 'type' });
 
 //Определение ассоциаций для модели Teams
 Team.hasMany(TeamMember, { foreignKey: 'team' });

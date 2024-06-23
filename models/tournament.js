@@ -29,28 +29,13 @@ module.exports = (Sequelize, sequelize) => {
           allowNull: false
       },
       format: {
-          type: Sequelize.INTEGER,
-          
-          references: {
-              model: TournamentFormat,
-              key: 'format_id'
-          }
+          type: Sequelize.INTEGER   
       },
       level: {
-          type: Sequelize.INTEGER,
-         
-          references: {
-              model: TournamentLevel,
-              key: 'level_id'
-          }
+          type: Sequelize.INTEGER
       },
       type: {
-          type: Sequelize.INTEGER,
-          
-          references: {
-              model: TournamentType,
-              key: 'type_id'
-          }
+          type: Sequelize.INTEGER
       }
     });
     
